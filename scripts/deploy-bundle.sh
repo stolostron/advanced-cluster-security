@@ -184,6 +184,11 @@ spec:
   clusterConditions:
   - status: "True"
     type: ManagedClusterConditionAvailable
-  clusterSelector: {}
+  clusterSelector:
+    matchExpressions:
+    - key: vendor
+      operator: In
+      values:
+      - OpenShift
 ---
 EOF
