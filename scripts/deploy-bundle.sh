@@ -8,11 +8,13 @@ CMDNAME=`basename $0`
 
 # Display help information
 help () {
-  echo "Deploy image access secret to hub and target clusters by RHACM Subscription"
+  echo "Deploy ACS certificate bundles to all OpenShift managed clusters."
   echo ""
   echo "Prerequisites:"
-  echo " - kubectl CLI must be pointing to the cluster to which to deploy verification key"
+  echo " - kubectl CLI must be pointing to the cluster where ACS Central server is installed"
   echo " - roxctl and yq commands must be installed"
+  echo " - ROX_API_TOKEN must be defined as an environment variable"
+  echo " - ACS Central must be installed in the stackrox namespace"
   echo ""
   echo "Usage:"
   echo "  $CMDNAME [-i bundle-file]"
