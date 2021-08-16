@@ -53,7 +53,7 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-ACS_HOST=`oc get route -n stackrox central -o custom-columns=HOST:.spec.host --no-headers`
+ACS_HOST="$(oc get route -n stackrox central -o custom-columns=HOST:.spec.host --no-headers):443"
 if [[ -z "$ACS_HOST" ]]; then
 	echo "The ACS route has not been created yet. Deploy Central first." >&2
 	exit 1
