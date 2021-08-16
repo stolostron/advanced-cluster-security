@@ -34,8 +34,7 @@ Follow these steps to obtain the `roxctl` command:
 
 Follow these steps to deploy the certificates that the Advanced Cluster Security Secure Cluster Services will need to connect to the Central Server.
 1. Download the script from this repository [deploy-bundle.sh](scripts/deploy-bundle.sh)
-2. Run the script with the command: `./deploy-bundle.sh -a <hostname>:443 -i bundle.yaml | oc apply -f -`
-   The `<hostname>` is the same hostname for the Central Server that was obtained in step 2 of **Get a token**
+2. Run the script with the command: `./deploy-bundle.sh -i bundle.yaml | oc apply -f -`
 
 ### Deploy the policy
 

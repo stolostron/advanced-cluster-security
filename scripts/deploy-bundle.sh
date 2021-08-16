@@ -15,10 +15,9 @@ help () {
   echo " - roxctl and yq commands must be installed"
   echo ""
   echo "Usage:"
-  echo "  $CMDNAME [-l <key=value>] [-p <path/to/file>] [-n <namespace>] [-s <name>]"
+  echo "  $CMDNAME [-i bundle-file]"
   echo ""
   echo "  -h|--help                   Display this menu"
-  echo "  -a|--acs <hostname:port>         The ACS Central Server hostname:port to connect to."
   echo "  -i|--init <bundle-file>     The central init-bundles file name to save certs to."
   echo "                                (Default name is cluster-init-bundle.yaml"
   echo ""
@@ -40,11 +39,6 @@ while [[ $# -gt 0 ]]; do
             help
             exit 0
             ;;
-            -a|--acs)
-            shift
-            ACS_HOST=${1}
-            shift
-            ;;
             -i|--init)
             shift
             BUNDLE_FILE=${1}
@@ -59,8 +53,9 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-if [[ -z $ACS_HOST ]]; then
-	echo "The '-a|--acs <hostname:port>' parameter is required." >&2
+ACS_HOST=`oc get route -n stackrox central -o custom-columns=HOST:.spec.host --no-headers`
+if [[ -z "$ACS_HOST" ]]; then
+	echo "The ACS route has not been created yet. Deploy Central first." >&2
 	exit 1
 fi
 
