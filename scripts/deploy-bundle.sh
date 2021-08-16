@@ -8,17 +8,18 @@ CMDNAME=`basename $0`
 
 # Display help information
 help () {
-  echo "Deploy image access secret to hub and target clusters by RHACM Subscription"
+  echo "Deploy ACS certificate bundles to all OpenShift managed clusters."
   echo ""
   echo "Prerequisites:"
-  echo " - kubectl CLI must be pointing to the cluster to which to deploy verification key"
+  echo " - kubectl CLI must be pointing to the cluster where ACS Central server is installed"
   echo " - roxctl and yq commands must be installed"
+  echo " - ROX_API_TOKEN must be defined as an environment variable"
+  echo " - ACS Central must be installed in the stackrox namespace"
   echo ""
   echo "Usage:"
-  echo "  $CMDNAME [-l <key=value>] [-p <path/to/file>] [-n <namespace>] [-s <name>]"
+  echo "  $CMDNAME [-i bundle-file]"
   echo ""
   echo "  -h|--help                   Display this menu"
-  echo "  -a|--acs <hostname:port>         The ACS Central Server hostname:port to connect to."
   echo "  -i|--init <bundle-file>     The central init-bundles file name to save certs to."
   echo "                                (Default name is cluster-init-bundle.yaml"
   echo ""
@@ -40,11 +41,6 @@ while [[ $# -gt 0 ]]; do
             help
             exit 0
             ;;
-            -a|--acs)
-            shift
-            ACS_HOST=${1}
-            shift
-            ;;
             -i|--init)
             shift
             BUNDLE_FILE=${1}
@@ -59,8 +55,9 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-if [[ -z $ACS_HOST ]]; then
-	echo "The '-a|--acs <hostname:port>' parameter is required." >&2
+ACS_HOST="$(oc get route -n stackrox central -o custom-columns=HOST:.spec.host --no-headers):443"
+if [[ -z "$ACS_HOST" ]]; then
+	echo "The ACS route has not been created yet. Deploy Central first." >&2
 	exit 1
 fi
 
