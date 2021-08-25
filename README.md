@@ -33,6 +33,7 @@ Follow these steps to obtain the `roxctl` command:
 ### Install yq if not already present:
 For RHEL follow these steps
 https://snapcraft.io/install/yq/rhel
+
 RHEL 8 prep
 1. The EPEL repository can be added to RHEL 8 with the following command: `sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm`
 2. The EPEL repository can be added to RHEL 7 with the following command: `sudo dnf upgrade`
