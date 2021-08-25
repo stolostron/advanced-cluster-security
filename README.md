@@ -33,13 +33,14 @@ Follow these steps to obtain the `roxctl` command:
 ### Install yq if not already present:
 For RHEL follow these steps
 https://snapcraft.io/install/yq/rhel
-RHEL 8
+RHEL 8 prep
 1. The EPEL repository can be added to RHEL 8 with the following command: `sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm`
 2. The EPEL repository can be added to RHEL 7 with the following command: `sudo dnf upgrade`
-RHEL 7 
+
+RHEL 7 prep
 1. `sudo rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm`
 
-Finish
+Install yq
 1. Snap can now be installed as follows: `sudo dnf install snapd`
 2. Once installed, the systemd unit that manages the main snap communication socket needs to be enabled: `sudo systemctl enable --now snapd.socket`
 3. To enable classic snap support, enter the following to create a symbolic link between /var/lib/snapd/snap and /snap: `sudo ln -s /var/lib/snapd/snap /snap`
