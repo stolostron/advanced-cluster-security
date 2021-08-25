@@ -17,10 +17,10 @@ Wait a few minutes for the Central Server to install.  Then you will need to set
 
 Follow these steps to get the `ROX_API_TOKEN` for the command line:
 1. On your HUB, run `oc get route -n stackrox central`
-2. Open a browser to the hostname returned in the `HOST/PORT` column.  Make sure you use `https://hostname` so a secure connection is made. 
+2. Open a browser to the hostname returned in the `HOST/PORT` column.  Make sure you use `https://hostname` so a secure connection is made.
 3. Run the command `oc get secret -n stackrox central-htpasswd -o yaml | grep password` to view the base64 encoded password.  Decode the password with a command similar to `echo <base64-encoded-password> | base64 -d` to decode the encoded password.
 4. Login to the Advanced Cluster Security Central Server with the userid `admin` and the password obtained above.
-5. Select `Platform Configuration` and then select `Integrations` from the menu.  Scrol to the end of the list of integrations and select the StackRox API Token integration.
+5. Select `Platform Configuration` and then select `Integrations` from the menu.  Scroll to the end of the list of integrations and select the StackRox API Token integration.
 6. Select the New Integration button.  In the dialog that appears, specify a name for the token and select the `admin` role.  Click generate.
 7. Copy the generated token and on your command line run a command like `export ROX_API_TOKEN=value` to add the token to your shell environment.
 
@@ -44,4 +44,3 @@ Follow these steps to deploy the Secure Cluster Services policy.  **Note** that 
 
 
 Note that the default configuration for the bundle and for the policy is to deploy to all managed cluster that are labeled with `vendor=OpenShift`.  This procedure is only intended to work with OpenShift managed clusters.
- 
