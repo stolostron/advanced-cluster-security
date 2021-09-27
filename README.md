@@ -18,7 +18,7 @@ Wait a few minutes for the Central Server to install.  Then you will need to set
 Follow these steps to get the `ROX_API_TOKEN` for the command line:
 1. On your HUB, run `oc get route -n stackrox central`
 2. Open a browser to the hostname returned in the `HOST/PORT` column.  Make sure you use `https://hostname` so a secure connection is made. 
-3. Run the command `oc get secret -n stackrox central-htpasswd -o yaml | grep password` to view the base64 encoded password.  Decode the password with a command similar to `echo <base64-encoded-password> | base64 -d` to decode the encoded password.
+3. Run the command `oc get secret -n stackrox central-htpasswd -o yaml | grep password` to view the base64 encoded password.  Decode the password with a command similar to `echo <base64-encoded-password> | base64 -d` to decode the encoded password. (Or as a one liner if `jq` is installed: `oc get secret -n stackrox -o json central-htpasswd | jq '.data.password' -r | base64 --decode`)
 4. Login to the Advanced Cluster Security Central Server with the userid `admin` and the password obtained above.
 5. Select `Platform Configuration` and then select `Integrations` from the menu.  Scrol to the end of the list of integrations and select the StackRox API Token integration.
 6. Select the New Integration button.  In the dialog that appears, specify a name for the token and select the `admin` role.  Click generate.
@@ -34,7 +34,7 @@ Follow these steps to obtain the `roxctl` command:
 
 Follow these steps to deploy the certificates that the Advanced Cluster Security Secure Cluster Services will need to connect to the Central Server.
 1. Download the script from this repository [deploy-bundle.sh](scripts/deploy-bundle.sh)
-2. Run the script with the command: `./deploy-bundle.sh -i bundle.yaml | oc apply -f -`
+2. Run the script with the command: `./scripts/deploy-bundle.sh -i bundle.yaml | oc apply -f -`
 
 ### Deploy the policy
 
