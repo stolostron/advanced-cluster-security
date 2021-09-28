@@ -52,12 +52,12 @@ Install yq
 
 Follow these steps to deploy the certificates that the Advanced Cluster Security Secure Cluster Services will need to connect to the Central Server.
 1. Download the script from this repository [deploy-bundle.sh](scripts/deploy-bundle.sh) `wget https://raw.githubusercontent.com/open-cluster-management/advanced-cluster-security/main/scripts/deploy-bundle.sh`
-2. Run the script with the command: `./deploy-bundle.sh -i bundle.yaml | oc apply -f -`
+2. Run the script with the command: `./scripts/deploy-bundle.sh -i bundle.yaml | oc apply -f -`
 
 ### Deploy the policy
 
 Follow these steps to deploy the Secure Cluster Services policy.  **Note** that this policy requires the steps above to have been completed.
-1. On the HUB cluster, deploy the policy [Policy to install the Red Hat Advanced Cluster Security Secure Cluster Services](https://github.com/open-cluster-management/policy-collection/blob/main/community/CM-Configuration-Management/policy-acs-operator-clusters.yaml)
+1. On the HUB cluster, deploy the policy [Policy to install the Red Hat Advanced Cluster Security Secure Cluster Services](https://github.com/open-cluster-management/policy-collection/blob/main/community/CM-Configuration-Management/policy-acs-operator-secured-clusters.yaml)
 2. Make sure the policy is set to `enforce` for the `remediationAction`
 
 
