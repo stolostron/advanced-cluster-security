@@ -14,14 +14,16 @@ help () {
   echo " - kubectl CLI must be pointing to the cluster where ACS Central server is installed"
   echo " - roxctl and yq commands must be installed"
   echo " - ROX_API_TOKEN must be defined as an environment variable"
-  echo " - ACS Central must be installed in the stackrox namespace"
+  echo " - The init bundles and SecuredClusters must be in the stackrox namespace"
   echo ""
   echo "Usage:"
-  echo "  $CMDNAME [-i bundle-file]"
+  echo "  $CMDNAME [-i bundle-file] [-c central-namespace]"
   echo ""
   echo "  -h|--help                   Display this menu"
   echo "  -i|--init <bundle-file>     The central init-bundles file name to save certs to."
   echo "                                (Default name is cluster-init-bundle.yaml"
+  echo "  -c|--central <namespace>    The central server namespace"
+  echo "                                (Default namespace is stackrox"
   echo ""
 } >&2
 
@@ -30,8 +32,8 @@ if [ -z "$ROX_API_TOKEN" ]; then
 	exit 1
 fi
 
-# The namespace is required to be stackrox
 NAMESPACE=stackrox
+CENTRALNS=stackrox
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -46,6 +48,11 @@ while [[ $# -gt 0 ]]; do
             BUNDLE_FILE=${1}
             shift
             ;;
+            -c|--central)
+            shift
+            CENTRALNS=${1}
+            shift
+            ;;
             *)    # default
             echo "Invalid input: ${1}" >&2
             exit 1
@@ -55,7 +62,7 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-ACS_HOST="$(oc get route -n stackrox central -o custom-columns=HOST:.spec.host --no-headers):443"
+ACS_HOST="$(oc get route -n $CENTRALNS central -o custom-columns=HOST:.spec.host --no-headers):443"
 if [[ -z "$ACS_HOST" ]]; then
 	echo "The ACS route has not been created yet. Deploy Central first." >&2
 	exit 1
@@ -66,7 +73,7 @@ if [[ -z $BUNDLE_FILE ]]; then
 	exit 1
 fi
 
-if [[ -z $NAMESPACE ]]; then
+if [[ -z "$NAMESPACE" ]]; then
   NAMESPACE=stackrox
 fi
 
@@ -99,17 +106,17 @@ cat <<EOF
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: stackrox
+  name: ${NAMESPACE}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: stackrox-staging
+  name: ${NAMESPACE}-staging
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: stackrox-cluster-channel
+  name: ${NAMESPACE}-cluster-channel
 ---
 apiVersion: v1
 data:

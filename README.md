@@ -7,6 +7,8 @@ Deploy this policy to your HUB to install the Advanced Cluster Security Central 
 
 - [Central Server Policy](https://github.com/open-cluster-management/policy-collection/blob/main/community/CM-Configuration-Management/policy-acs-operator-central.yaml)
 
+**NOTE** You can install the Central Server manually (using OperatorHub instead of the policy above).  The Central Server can be installed into any namespace.
+
 ## Deploy the Secure Cluster Services
 
 Wait a few minutes for the Central Server to install.  Then you will need to setup your command line to have the following CLI and API token.
@@ -53,6 +55,8 @@ Install yq
 Follow these steps to deploy the certificates that the Advanced Cluster Security Secure Cluster Services will need to connect to the Central Server.
 1. Download the script from this repository [deploy-bundle.sh](scripts/deploy-bundle.sh) `wget https://raw.githubusercontent.com/open-cluster-management/advanced-cluster-security/main/scripts/deploy-bundle.sh`
 2. Run the script with the command: `./scripts/deploy-bundle.sh -i bundle.yaml | oc apply -f -`
+
+**NOTE** If you installed the Central Server into a namespace other than `stackrox`, you must specify the namespace using the `-c <central-server-namespace>` option.
 
 ### Deploy the policy
 
