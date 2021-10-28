@@ -20,7 +20,7 @@ Wait a few minutes for the Central Server to install.  Then you will need to set
 Follow these steps to get the `ROX_API_TOKEN` for the command line:
 1. On your HUB, run `oc get route -n stackrox central`
 2. Open a browser to the hostname returned in the `HOST/PORT` column.  Make sure you use `https://hostname` so a secure connection is made. 
-3. Run the command `oc get secret -n stackrox central-htpasswd -o yaml | grep password | awk ' { print $2}' | sed -n 1p | base64 -d &&echo ""` to get the base64 encoded password and to decode the encoded password.
+3. Run the command `oc get secret -n stackrox central-htpasswd -ojsonpath='{.data.password}' | base64 --decode` to get the base64 encoded password and to decode the encoded password.
 4. Login to the Advanced Cluster Security Central Server with the userid `admin` and the password obtained above.
 5. Select `Platform Configuration` and then select `Integrations` from the menu.  Scroll to the end of the list of integrations and select the StackRox API Token integration.
 6. Select the New Integration button.  In the dialog that appears, specify a name for the token and select the `admin` role.  Click generate.
