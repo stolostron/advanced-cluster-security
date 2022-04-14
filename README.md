@@ -1,5 +1,44 @@
 # advanced-cluster-security
-Learn how quickly you can get Advanced Cluster Security deployed in your Open Cluster Management installation.
+Learn how quickly you can get Advanced Cluster Security deployed in your Advanced Cluster Management installation.
+
+## Prerequisites
+
+These instructions require Advanced Cluster Management version 2.3 or 2.4 to already be installed. If you are 
+using Advanced Cluster Management 2.5 or newer, use the new OpenShift Plus PolicySet which can install
+Advanced Cluster Security along with other components of OpenShift Plus.  If you have followed the procedure
+below and are upgrading to Advanced Cluster Management, be aware the namespace `Channel` feature is no longer
+present so you must perform the following steps to migrate the procedure below to use features available in
+Advanced Cluster Management 2.5.
+
+### Migration to Advanced Cluster Management 2.5
+
+For the Secured Cluster Services to continue being deployed to new managed clusters on Advanced Cluster
+Management 2.5, you must perform some migration steps to switch to our new way to securely push secrets
+to managed clusters.  Most of the work is done automatically just by deploying the OpenShift Plus `PolicySet`,
+but follow these steps which does the migration and cleans up resources that are no longer used.
+
+These command must all be run on the Advanced Cluster Management Hub cluster.
+1. Delete the namespaces, subscription and `PlacementRule` that are no longer used.
+
+```
+oc delete ns stackrox-staging stackrox-cluster-channel
+oc delete subscription.apps.open-cluster-management.io -n stackrox secured-cluster-sub
+oc delete PlacementRule -n stackrox secured-cluster-placement
+```
+
+2. Compare your ACS policies configuration information to the details in the ACM 2.5 OpenShift Plus PolicySet. Carry over any configuration changes you need to the OpenShift Plus policyset and remove any policyset policies you do not need.
+    - [Central server policy](https://raw.githubusercontent.com/stolostron/policy-collection/main/policygenerator/policy-sets/community/openshift-plus/input-acs-central/policy-acs-operator-central.yaml)
+    - [Secured cluster services policy](https://raw.githubusercontent.com/stolostron/policy-collection/main/policygenerator/policy-sets/community/openshift-plus/input-sensor/policy-advanced-managed-cluster-security.yaml)
+3. Delete the old policies for Advanced Cluster Security.
+
+```
+oc delete policies.policy.open-cluster-management.io -n <namespace> policy-advanced-cluster-security-central policy-advanced-managed-cluster-security
+```
+
+4. Deploy the OpenShift Plus `PolicySet`. If you do not want some of the components of OpenShift Plus to be installed, be sure to edit
+the [policy manifest file](https://raw.githubusercontent.com/stolostron/policy-collection/main/policygenerator/policy-sets/community/openshift-plus/policyGenerator.yaml) to remove those components.  
+See the [README.md](https://github.com/stolostron/policy-collection/blob/main/policygenerator/policy-sets/community/openshift-plus/README.md) for more details on the OpenShift Plus `PolicySet`.
+
 
 ## Deploy the Central Server
 
